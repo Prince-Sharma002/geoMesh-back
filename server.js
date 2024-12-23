@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const nodemailer  = require('nodemailer');
 
 // Initialize the app
 const app = express();
@@ -343,47 +342,6 @@ app.put('/api/polygon/:id', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: 'Error updating polygon', error: err.message });
-  }
-});
-
-
-// mail
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: "complainbox757@gmail.com", // Your email
-    pass: "daef peiz ajwd kcjt"  // Your email password
-  }
-});
-
-const sendEmail = (to, subject, text) => {
-  const mailOptions = {
-    from: "complainbox757@gmail.com",
-    to ,
-    subject ,
-    text 
-  };
-
-  return new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(info);
-      }
-    });
-  });
-};
-
-// complain mail
-app.post('/api/sendemail', async (req, res) => {
-  try {
-    const { to, subject, text } = req.body;
-    const info = await sendEmail(to, subject, text);
-    return res.status(200).json({ msg: "Email sent successfully", info });
-  } catch (err) {
-    console.log(err);
-    res.status(500).send('Failed to send email');
   }
 });
 
