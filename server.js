@@ -376,7 +376,7 @@ const sendEmail = (to, subject, text) => {
 };
 
 // complain mail
-app.post('/sendemail', async (req, res) => {
+app.post('/api/sendemail', async (req, res) => {
   try {
     const { to, subject, text } = req.body;
     const info = await sendEmail(to, subject, text);
