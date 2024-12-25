@@ -51,6 +51,7 @@ const PersonInfoSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // You should hash passwords before saving them
   dateOfBirth: { type: Date },
+  isAdmin : { type: Boolean, default: false},
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -182,7 +183,7 @@ app.get('/api/markers', async (req, res) => {
 
 app.post('/api/signup', async (req, res) => {
   try {
-    const { name, email, password, dateOfBirth } = req.body;
+    const { name, email, password, dateOfBirth  } = req.body;
 
     // Check if email already exists
     const existingUser = await PersonInfo.findOne({ email });
@@ -198,6 +199,7 @@ app.post('/api/signup', async (req, res) => {
       name,
       email,
       password: hashedPassword, // Save the hashed password
+      // Set default isAdmin to false (you can change this to true if you want to make users admins)
       dateOfBirth,
     });
 
@@ -232,9 +234,9 @@ app.post('/api/signin', async (req, res) => {
     // Generate a token
     const token = jwt.sign({ id: person._id }, 'your_jwt_secret', { expiresIn: '1h' });
 
-    res.status(200).json({ message: 'Sign in successful', token });
+    res.status(200).json({ message: 'Sign in successful', token ,  });
   } catch (err) {
-    res.status(500).json({ message: 'Error during sign in', error: err.message });
+    res.status(500).json({ message: 'Error during sign in', error: err.message , "admin" : person.isAdmin });
   }
 });
 
